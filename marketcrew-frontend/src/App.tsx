@@ -26,6 +26,63 @@ type GeneratedContent = {
   whatsapp_broadcast: string;
 };
 
+interface FormFieldProps {
+  label: string;
+  id: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  placeholder?: string;
+  textarea?: boolean;
+  rows?: number;
+  icon?: string;
+}
+
+const FormField: React.FC<FormFieldProps> = ({
+  label,
+  id,
+  name,
+  value,
+  onChange,
+  placeholder,
+  textarea = false,
+  rows = 1,
+  icon,
+}) => {
+  return (
+    <motion.div 
+      whileHover={{ y: -2 }}
+      className="group"
+    >
+      <label htmlFor={id} className="flex items-center text-sm font-semibold text-navy-primary mb-3">
+        {icon && <span className="mr-2">{icon}</span>}
+        {label}
+      </label>
+      {textarea ? (
+        <textarea
+          id={id}
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          rows={rows}
+          className="form-input w-full"
+        />
+      ) : (
+        <input
+          type="text"
+          id={id}
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          className="form-input w-full"
+        />
+      )}
+    </motion.div>
+  );
+};
+
 function App() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -126,7 +183,7 @@ function App() {
     }
   };
 
-  const handleSendToNotion = async () => {
+  // const handleSendToNotion = async () => {
     if (allGeneratedContent) {
       try {
         const token = localStorage.getItem('access_token');
@@ -236,11 +293,7 @@ function App() {
           value={formData.brand_name}
           onChange={handleChange}
           placeholder="Your company name"
-          icon={
-            <div className="w-6 h-6 bg-navy-primary/10 rounded-full flex items-center justify-center text-navy-primary">
-              🏢
-            </div>
-          }
+          icon="🏢"
         />
         
         <FormField
@@ -250,11 +303,7 @@ function App() {
           value={formData.industry}
           onChange={handleChange}
           placeholder="e.g. Fashion, Tech, Food"
-          icon={
-            <div className="w-6 h-6 bg-navy-primary/10 rounded-full flex items-center justify-center text-navy-primary">
-              🏭
-            </div>
-          }
+          icon="🏭"
         />
         
         <FormField
@@ -264,18 +313,14 @@ function App() {
           value={formData.audience}
           onChange={handleChange}
           placeholder="e.g. Young professionals, Parents"
-          icon={
-            <div className="w-6 h-6 bg-navy-primary/10 rounded-full flex items-center justify-center text-navy-primary">
-              👥
-            </div>
-          }
+          icon="👥"
         />
         
         <div>
           <label htmlFor="tone" className="flex items-center text-sm font-medium text-navy-primary mb-3">
-            <div className="w-6 h-6 bg-navy-primary/10 rounded-full flex items-center justify-center text-navy-primary mr-2">
+            <span className="w-6 h-6 bg-navy-primary/10 rounded-full flex items-center justify-center text-navy-primary mr-2">
               🎭
-            </div>
+            </span>
             Brand Tone
           </label>
           <div className="relative">
@@ -310,11 +355,7 @@ function App() {
         placeholder="What do you want to achieve with this content? Describe your marketing goals..."
         textarea
         rows={4}
-        icon={
-          <div className="w-6 h-6 bg-navy-primary/10 rounded-full flex items-center justify-center text-navy-primary">
-            🎯
-          </div>
-        }
+        icon="🎯"
       />
       
       <FormField
@@ -326,17 +367,13 @@ function App() {
         placeholder="List your key products or services (comma-separated)"
         textarea
         rows={3}
-        icon={
-          <div className="w-6 h-6 bg-navy-primary/10 rounded-full flex items-center justify-center text-navy-primary">
-            📦
-          </div>
-        }
+        icon="📦"
       />
       
       {/* Submit Button */}
       <div className="pt-8">
         <motion.button
-          whileHover={{ 
+          whileHover={{
             scale: 1.02,
             boxShadow: "0 10px 25px rgba(37, 77, 112, 0.3)"
           }}
@@ -351,7 +388,7 @@ function App() {
             className="absolute inset-0 bg-gradient-to-r from-navy-primary/30 to-rust/30"
             initial={{ x: "-100%" }}
             animate={{ x: loading ? "100%" : "0%" }}
-            transition={{ 
+            transition={{
               duration: loading ? 2 : 0,
               repeat: loading ? Infinity : 0,
               ease: "linear"
@@ -546,79 +583,5 @@ function App() {
     </div>
   );
 }
-
-interface FormFieldProps {
-  label: string;
-  id: string;
-  name: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  placeholder?: string;
-  textarea?: boolean;
-  rows?: number;
-  icon?: string;
-}
-
-const FormField: React.FC<FormFieldProps> = ({
-  label,
-  id,
-  name,
-  value,
-  onChange,
-  placeholder,
-  textarea = false,
-  rows = 1,
-  icon,
-}) => {
-  return (
-    <motion.div 
-      whileHover={{ y: -2 }}
-      className="group"
-    >
-      <label htmlFor={id} className="flex items-center text-sm font-semibold text-navy-primary mb-3">
-        {icon && <span className="mr-2">{icon}</span>}
-        {label}
-      </label>
-      {textarea ? (
-        <textarea
-          id={id}
-          name={name}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          rows={rows}
-          className="form-input w-full"
-        />
-      ) : (
-        <input
-          type="text"
-          id={id}
-          name={name}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          className="form-input w-full"
-        />
-      )}
-    </motion.div>
-  );
-};
-
-interface ContentCardProps {
-  title: string;
-  content: string;
-  formatContent: (content: string) => JSX.Element[];
-}
-
-const ContentCard: React.FC<ContentCardProps> = ({ title, content, formatContent }) => {
-  return (
-    <div className="bg-white p-6 rounded-xl flex flex-col">
-      <h3 className="text-2xl font-bold text-navy-secondary mb-4">{title}</h3>
-      <div className="prose max-w-none flex-grow overflow-y-auto">
-        {formatContent(content)}
-      </div>
-    </div>
-  );
-};
 
 export default App;
