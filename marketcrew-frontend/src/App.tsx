@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import Auth from "./Auth";
 import Home from "./Home";
 
-const BACKEND_URL = "http://localhost:8000";
+const BACKEND_URL = "https://marketcrewe-v1-backend-production.up.railway.app";
 
 type FormData = {
   brand_name: string;
